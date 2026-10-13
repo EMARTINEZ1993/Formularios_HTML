@@ -7,13 +7,16 @@
 <style>
   * { box-sizing: border-box; }
   body {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
     color: #1f2328;
     line-height: 1.5;
     font-size: 15px;
-    max-width: 880px;
+    max-width: 80%;
     margin: 0 auto;
-    padding: 30px 20px 60px;
+    padding: 30px 20px 40px;
     background: #fff;
   }
   h1 {
@@ -34,7 +37,7 @@
     background: #f4f4f4;
     padding: 8px 12px;
     border-left: 4px solid #2ecc71;
-    margin-top: 34px;
+    margin-top: 0;
   }
   h3 {
     font-size: 14.5px;
@@ -77,13 +80,108 @@
     white-space: pre;
   }
   a { color: #2ecc71; }
+
+  /* --- Navegación paso a paso --- */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .progress-label {
+    font-size: 12.5px;
+    color: #666;
+    white-space: nowrap;
+  }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: #eee;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #2ecc71;
+    width: 0%;
+    transition: width 0.25s ease;
+  }
+  .step { display: none; }
+  .step.active { display: block; }
+  .step.enter-next { animation: stepInNext 0.45s cubic-bezier(.22,.9,.32,1); }
+  .step.enter-prev { animation: stepInPrev 0.45s cubic-bezier(.22,.9,.32,1); }
+
+  @keyframes stepInNext {
+    from { opacity: 0; transform: translateX(50px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes stepInPrev {
+    from { opacity: 0; transform: translateX(-50px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .nav-buttons {
+    background: #fff;
+    border-top: 1px solid #e3e3e3;
+    padding: 12px 0;
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-buttons button {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    background: #2c3e50;
+    transition: background-color 0.2s;
+  }
+  .nav-buttons button:hover:not(:disabled) {
+    background: #1f2d3a;
+  }
+  .nav-buttons button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  #btnNext { background: #2ecc71; }
+  #btnNext:hover:not(:disabled) { background: #27ae60; }
+  .nav-current {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+  }
+
+  @media print {
+    .progress, .nav-buttons { display: none !important; }
+    body { max-width: 100%; }
+    .step {
+      display: block !important;
+      page-break-before: always;
+      break-before: page;
+    }
+    .step[data-step="1"] { page-break-before: avoid; break-before: avoid; }
+    pre { white-space: pre-wrap; }
+  }
 </style>
 </head>
 <body>
 
 <h1>Guía paso a paso: replicar el proyecto "Formularios"</h1>
-<p class="subtitle">Construcción de carpetas, index.html bloque por bloque, login.html, registro.html y sus hojas de estilo completas</p>
+<p class="subtitle">Construcción de carpetas, index.html bloque por bloque, login.html, registro.html y sus hojas de estilo completas.<br>
+Página de referencia: <a href="https://emartinez1993.github.io/Formularios_HTML/" target="_blank">ver resultado final</a></p>
 
+<p>¿Prefieres consultarla sin conexión? <a href="Guia_Replicar_Formularios.pdf" target="_blank">Descargar guía en PDF</a>.</p>
+<div class="progress">
+  <span class="progress-label">Paso <span id="stepCurrent">1</span> de <span id="stepTotal">12</span></span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<section class="step" data-step="1">
 <h2>Paso 0 — Estructura de carpetas</h2>
 <p>Crea esta jerarquía antes de escribir nada:</p>
 <div class="tree">FORMULARIOS/
@@ -95,7 +193,9 @@
 ├── index.html
 ├── login.html
 └── registro.html</div>
+</section>
 
+<section class="step" data-step="2">
 <h2>Paso 1 — Esqueleto base de index.html</h2>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
@@ -125,7 +225,9 @@
     &lt;/main&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre>
+</section>
 
+<section class="step" data-step="3">
 <h2>Paso 2 — Bloque "Texto"</h2>
 <p>Dentro de <code>&lt;section&gt;</code>, agrega el primer <code>&lt;form&gt;</code>:</p>
 <pre>&lt;form action=""&gt;
@@ -157,7 +259,9 @@
         &lt;input type="reset" value="Restablecer"&gt;
     &lt;/fieldset&gt;
 &lt;/form&gt;</pre>
+</section>
 
+<section class="step" data-step="4">
 <h2>Paso 3 — Bloque "Contacto"</h2>
 <p>Agrega el segundo <code>&lt;form&gt;</code> justo debajo del anterior (misma estructura: fieldset &gt; legend &gt; p &gt; pares label/input &gt; botones):</p>
 <pre>&lt;form action=""&gt;
@@ -185,7 +289,9 @@
         &lt;input type="reset" value="Restablecer"&gt;
     &lt;/fieldset&gt;
 &lt;/form&gt;</pre>
+</section>
 
+<section class="step" data-step="5">
 <h2>Paso 4 — Bloque "Numéricos"</h2>
 <pre>&lt;form action=""&gt;
     &lt;fieldset&gt;
@@ -204,7 +310,9 @@
         &lt;input type="reset" value="Restablecer"&gt;
     &lt;/fieldset&gt;
 &lt;/form&gt;</pre>
+</section>
 
+<section class="step" data-step="6">
 <h2>Paso 5 — Bloque "Fecha y hora"</h2>
 <pre>&lt;form action=""&gt;
     &lt;fieldset&gt;
@@ -235,7 +343,9 @@
         &lt;input type="reset" value="Restablecer"&gt;
     &lt;/fieldset&gt;
 &lt;/form&gt;</pre>
+</section>
 
+<section class="step" data-step="7">
 <h2>Paso 6 — Bloque "Selección"</h2>
 <pre>&lt;form action=""&gt;
     &lt;fieldset&gt;
@@ -264,7 +374,9 @@
     &lt;/fieldset&gt;
 &lt;/form&gt;</pre>
 <div class="nota">Nota: ambos radios comparten <code>name="radioGroup"</code> para que el navegador los trate como un único grupo exclusivo.</div>
+</section>
 
+<section class="step" data-step="8">
 <h2>Paso 7 — Bloque "Listas desplegables (select)"</h2>
 <pre>&lt;form action=""&gt;
     &lt;fieldset&gt;
@@ -320,7 +432,9 @@
     &lt;/fieldset&gt;
 &lt;/form&gt;</pre>
 <p>Con esto <code>index.html</code> queda completo (6 bloques dentro de un <code>&lt;section&gt;</code>).</p>
+</section>
 
+<section class="step" data-step="9">
 <h2>Paso 8 — css/formularios.css (código completo)</h2>
 <p>Reset de box-sizing, <code>header</code> oscuro con nav, <code>main</code>/<code>section</code> en flex, tarjetas blancas por <code>form</code>, y colores por tipo de botón (verde = submit, rojo = reset, azul = button).</p>
 <pre>* {
@@ -469,7 +583,9 @@ select:disabled {
     background-color: #eee;
     cursor: not-allowed;
 }</pre>
+</section>
 
+<section class="step" data-step="10">
 <h2>Paso 9 — login.html</h2>
 <p>Crea un archivo nuevo que reutilice el mismo patrón <code>main &gt; section &gt; form &gt; fieldset</code>, pero más simple (un solo formulario, su propio CSS login.css):</p>
 <pre>&lt;!DOCTYPE html&gt;
@@ -509,7 +625,9 @@ select:disabled {
     &lt;/main&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre>
+</section>
 
+<section class="step" data-step="11">
 <h2>Paso 10 — css/login.css (código completo)</h2>
 <p>Centra la tarjeta en pantalla completa (<code>body</code> con <code>flex</code> + <code>min-height:100vh</code>), da estilo a inputs con <code>:focus</code>, y usa <code>label:has(+ input[type="checkbox"])</code> para mostrar labels de checkbox/radio en línea. Es compartido por login.html y registro.html.</p>
 <pre>* {
@@ -660,7 +778,9 @@ input[type="reset"]:hover {
 .enlace a:hover {
     text-decoration: underline;
 }</pre>
+</section>
 
+<section class="step" data-step="12">
 <h2>Paso 11 — registro.html</h2>
 <p>Mismo patrón base que login.html, pero con más campos.</p>
 <div class="nota"><strong>Importante:</strong> el bloque de género tiene una estructura particular que debes copiar exactamente como está (la label "Femenino" y su input tienen espaciado/orden distinto al de "Masculino"/"Otro" — es intencional, no se debe normalizar).</div>
@@ -735,10 +855,78 @@ input[type="reset"]:hover {
         &lt;/section&gt;
     &lt;/main&gt;
 
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+</pre>
+</section>
 
+<div class="nav-buttons">
+  <button id="btnPrev">← Anterior</button>
+  <span class="nav-current" id="navCurrentLabel"></span>
+  <button id="btnNext">Siguiente →</button>
+</div>
 
+<script>
+(function () {
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var total = steps.length;
+  var current = 0;
+
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+  var stepCurrentEl = document.getElementById('stepCurrent');
+  var stepTotalEl = document.getElementById('stepTotal');
+  var progressFill = document.getElementById('progressFill');
+  var navCurrentLabel = document.getElementById('navCurrentLabel');
+
+  stepTotalEl.textContent = total;
+
+  function render(direction) {
+    steps.forEach(function (step, i) {
+      var isActive = i === current;
+      step.classList.remove('enter-next', 'enter-prev');
+      step.classList.toggle('active', isActive);
+      if (isActive && direction) {
+        void step.offsetWidth;
+        step.classList.add(direction);
+      }
+    });
+
+    stepCurrentEl.textContent = current + 1;
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+
+    btnPrev.disabled = current === 0;
+    btnNext.textContent = current === total - 1 ? 'Finalizado ✓' : 'Siguiente →';
+    btnNext.disabled = current === total - 1;
+
+    var h2 = steps[current].querySelector('h2');
+    navCurrentLabel.textContent = h2 ? h2.textContent : '';
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total) return;
+    var direction = index > current ? 'enter-next' : 'enter-prev';
+    current = index;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    render(direction);
+  }
+
+  btnPrev.addEventListener('click', function () { goTo(current - 1); });
+  btnNext.addEventListener('click', function () { goTo(current + 1); });
+
+  render();
+
+  ['copy', 'cut', 'paste', 'contextmenu', 'selectstart'].forEach(function (evt) {
+    document.addEventListener(evt, function (e) { e.preventDefault(); });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key ? e.key.toLowerCase() : '';
+    var isCopyPasteCombo = (e.ctrlKey || e.metaKey) && (k === 'c' || k === 'x' || k === 'v');
+    if (isCopyPasteCombo) {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
